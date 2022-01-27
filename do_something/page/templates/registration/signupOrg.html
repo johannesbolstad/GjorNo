@@ -1,0 +1,18 @@
+{% extends 'page/base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="animate__animated animate__fadeInUp">
+<div class="cont">
+
+  <h2>Lag organisjasjonsbruker</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Opprett organisasjon</button>
+  </form>
+</div>
+   
+{% endblock %}
+

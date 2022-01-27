@@ -1,0 +1,17 @@
+{% extends 'page/base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="animate__animated animate__fadeInUp">
+<div class="cont">
+
+  <h2>Er du privatperson eller organisasjon?</h2>
+  
+    <button> <a href="{% url 'signupPriv' %}">Privatperson </a></button>
+
+    <button> <a href="{% url 'signupOrg' %}">Organisasjon</a></button>
+
+</div>
+   
+{% endblock %}

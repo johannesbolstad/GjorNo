@@ -1,0 +1,53 @@
+{% extends "page/base.html" %}
+{% block content %}
+
+<div class="animate__animated animate__fadeInUp">
+{% if user.is_superuser %}
+<div class = "cont">
+<h3> Aktive aktiviteter: {{activitys}} </h3>
+<h3> Aktive brukere: {{users}} </h3>
+<h3> Aktive Organisajonsbrukere: {{number_of_org_users}} </h3>
+<h3> Aktive Privatbrukere: {{number_of_private_users}} </h3>
+</div>
+
+<div class="cont">
+  <h3> De 10 mest populære aktivitetene </h3>
+</div
+
+
+
+
+<!--Loader has_group fra templatetags-->
+        {% load has_group %} 
+ 
+
+
+<table style="width:100%" id="stats">
+<tr>
+    <th>Bruker</th>
+    <th>Navn</th> 
+    <th>Påmeldte</th>
+    <th>Dato</th>
+  </tr>
+ {% for post in posts %}
+  <tr>
+    {% if post.user|has_group:"Organisasjon" %}
+    <th>{{ post.user.orguser.org_name }}</th>
+    {% else %}
+    <th>{{ post.user.get_full_name}}</th>
+    {%endif%}
+    <th>{{post.title}}</th> 
+    <th>{{ post.registrations.all.count}}</th>
+    <th>{{ post.date}}</th>
+  </tr>
+       
+
+ {% endfor %}
+</table>
+
+
+  </div>
+  {% endif %}
+</div>
+
+{% endblock content %}

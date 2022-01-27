@@ -1,0 +1,63 @@
+{% extends "page/base.html" %}
+
+{% load crispy_forms_tags %}
+{% load has_group %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% block content %}
+
+{% if request.user|has_group:"Organisasjon" %}
+ 
+
+  <h1>Legge til en aktivitet</h1>
+    
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.title|as_crispy_field }}
+    {{ form.description|as_crispy_field }}
+    <div class="row">
+      <div class="col-6">
+        {{ form.place|as_crispy_field }}
+      </div>
+      <div class="col-6">
+        {{ form.paid|as_crispy_field }}
+      </div>
+      
+    </div>
+  {{ form.date|as_crispy_field }}    
+  {{ form.time|as_crispy_field }}    
+
+  <button type="submit" class="btn btn-success">Lagre aktivitet</button>
+  </form>
+
+{%endif%}
+
+{% if request.user|has_group:"Privatperson" %}
+
+
+  <h1>Legge til en aktivitet</h1>
+      
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.title|as_crispy_field }}
+    {{ form.description|as_crispy_field }}
+    <div class="row">
+      <div class="col-6">
+        {{ form.place|as_crispy_field }}
+      </div>
+    </div> 
+
+  <button type="submit" class="btn btn-success">Lagre aktivitet</button>
+  </form>
+
+
+{%endif%}
+
+{% endblock content %}

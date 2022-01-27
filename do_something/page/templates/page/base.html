@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+
+{% block mycss %} {% endblock mycss %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+   <!-- fontawsome -->
+    <script src="https://kit.fontawesome.com/1c76dd0710.js" crossorigin="anonymous"></script>
+
+ <!-- animasjoner fra https://animate.style -->
+ 
+ 
+ 
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'page/main.css' now "U" %}">
+    
+	{% if title %}
+        <title>GjørNo' - {{ title }}</title>
+    {% else %}
+        <title>GjørNo'</title>
+    {% endif %}
+</head>
+<body>
+
+  <div class= "wrapper">
+    <div class="sidebar">
+        <h2>GjørNo'</h2>
+         <a href="#" class="toggle-button">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </a>
+
+        <ul>
+          <li><a href="{% url 'page-home' %}"><i class="fas fa-home"></i>Hjem</a></li>
+          <li><a href="{% url 'page-about' %}"><i class="fas fa-info-circle"></i>Info om GjørNo</a></li>
+         
+          {% load has_group %}
+         {% if request.user|has_group:"Privatperson" %}
+          <li><a href="{% url 'page-log'%}"><i class="fas fa-history" ></i>Aktivitetslogg</a></li>
+          {%endif%}
+          <!-- Endrer sidebar dersom en bruker er innlogget --> 
+          {% if user.is_authenticated%}
+            {%if not user.is_superuser%}
+              <li><a href="{% url 'page-addActivity'%}"><i class="fas fa-plus"></i>Legg til aktivitet</a></li>
+            {% endif %}
+          <li><a href="{% url 'page-user' %}"><i class="fas fa-user"></i>Profil</a></li>
+          <li><a href="{% url 'logout' %}"><i class="fas fa-sign-in-alt"></i>Logg ut</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i>Logg inn</a></li>
+            <li><a href="{% url 'userOrOrg' %}"><i class="fas fa-sign-in-alt"></i>Lag bruker</a></li>
+          {% endif %}
+        
+          {% if user.is_superuser %}
+          <li><a href="{% url 'admin' %}"><i class="fas fa-users-cog"></i></i>Admin</a></li></li>
+          <li><a href="{% url 'page-statistics'%}"><i class="fas fa-chart-bar"></i></i>Statistikk</a></li></li>
+          {% endif %}
+          
+        </ul>
+        
+        
+  </div>
+  
+ 
+  <div class="main_content">
+  {% include 'page/messages.html' %}
+    
+
+          {% block content %}
+          {% endblock %}
+       
+  </div>
+  
+
+
+        
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src= "{% static 'page/navbar.js' %}"></script>
+    <script src= "{% static 'page/show_and_hide.js' %}"></script>
+     <script>
+    setTimeout(function(){
+      if ($('#msg').length > 0) {
+        $('#msg').remove();
+      }
+    }, 2000)
+  </script>
+    
+</body>
+</html>
+

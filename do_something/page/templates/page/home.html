@@ -1,0 +1,161 @@
+{% extends "page/base.html"%}
+
+{% comment %} Viser aktivitetene {% endcomment %}
+{% block content %}
+
+<div class="animate__animated animate__fadeInUp">
+ 
+ <div class="form-group row">
+    <form method="get">
+        <div class="filter-group">
+           <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+
+               <h2>Sted: </h2>
+      
+             {% for radio in form.inneute %}
+             
+             {% if radio.data.value == form.inneute.value %}
+             <label class="btn btn-secondary active" for"{{ radio.id_for_label }}" >
+             {% else %}
+             <label class="btn btn-secondary" for"{{ radio.id_for_label }}" >
+             {% endif %}
+
+              {{ radio.tag }}
+               <input type="radio" name="options" id="option1" autocomplete="off" value="{{ radio.id_for_label }}"> {{ radio.choice_label }}
+             </label>
+          
+              {% endfor %}
+
+          </div>
+      </div>
+  <div class="filter-group">
+
+    <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+     
+     <h2>Betaling: </h2>
+          {% for radio in form.gratisbetaling %}
+         
+             {% if radio.data.value == form.gratisbetaling.value %}
+             <label class="btn btn-secondary active" for"{{ radio.id_for_label }}" >
+             {% else %}
+            <label class="btn btn-secondary" for"{{ radio.id_for_label }}">
+             {% endif %}
+
+            {{ radio.tag }}
+              <input type="radio" name="options" id="option1" autocomplete="off" value="{{ radio.id_for_label }}"> {{ radio.choice_label }}
+           </label>
+           
+         {% endfor %}
+      </div>
+  </div>
+
+  <div class="filter-group">
+    <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+     
+     <h2>Bruker: </h2>
+          {% for radio in form.brukerInput %}
+         
+             {% if radio.data.value == form.brukerInput.value %}
+             <label class="btn btn-secondary active" for"{{ radio.id_for_label }}" >
+             {% else %}
+            <label class="btn btn-secondary" for"{{ radio.id_for_label }}">
+             {% endif %}
+
+            {{ radio.tag }}
+              <input type="radio" name="options" id="option1" autocomplete="off" value="{{ radio.id_for_label }}"> {{ radio.choice_label }}
+           </label>
+           
+         {% endfor %}
+  </div>
+   <button type="submit" class="btnsubmit">
+  Filtrer!</button>
+  </form>
+  </div>
+
+ 
+
+ <!--Loader has_group fra templatetags-->
+        {% load has_group %} 
+ 
+
+ 
+<!--<div class="card-columns">-->
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+
+<!-- Går igjennom alle aktivitetene fra databasen-->
+ {% for post in posts %}
+ <div class="col-sm-*">
+  <div class="card mr-4" style="width:20em">
+    {% if post.user|has_group:"Organisasjon" %}
+    <h5 style="text-align: center; "class="card-title">{{ post.title }} &nbsp;<i class="fas fa-sitemap"></i></h5>
+    {% else %}
+    <h5 style="text-align: center;" class="card-title">{{ post.title }} &nbsp;<i class="far fa-user"></i></h5>
+    {% endif %}
+
+      <div class="card-body" style="display:none;" id='{{ post.id }}'>
+      
+      <p class="card-text">{{ post.description }}</p>
+      {% if post.user|has_group:"Organisasjon" %}
+      <p class="card-text">Laget av: {{ post.user.orguser.org_name }}</p>
+      {% else %}
+      <p class="card-text">Laget av: {{ post.user.get_full_name }}</p>
+      {% endif %}
+      {% if post.paid == "G" %}
+      <p class="card-text">Gratis</p>
+      {% endif %}
+      {% if post.paid == "B" %}
+      <p class="card-text">Betaling</p>
+      {% endif %}
+      {% if not post.date == null %}
+      <p class="card-text"><small> Dato: {{ post.date}}, tid: {{post.time|time:'H:i'}}</small></p>
+      {% endif %}
+      </br>
+      <!--p class="card-text">{{ post.user.get_full_name }}</p></br>-->
+
+        {% if request.user|has_group:"Privatperson" %}
+          
+          {% if not user.is_authenticated %}
+            <a>Ingen knapp</a>
+          {% elif user not in post.registrations.all %}
+          
+            {% if not user.is_authenticated %}
+              <a>Ingen knapp</a>
+            {% elif user not in post.favourites.all %}
+              <a href="{% url 'favourite_add' post.id %}"><img src='/static/page/marker.png' width="20" height="20"/></a>
+              {%if post.user|has_group:"Organisasjon"%}
+              <a href="{% url 'registration_add' post.id %}"class="btn btn-success">Meld på</a>
+              {% endif %}
+            {%else%}
+              <a href="{% url 'favourite_add' post.id %}"><img src='/static/page/fjern.png' width="20" height="20"/></a>
+              {%if post.user|has_group:"Organisasjon"%}
+              <a href="{% url 'registration_and_removefav' post.id %}"class="btn btn-success">Meld på</a>
+              {% endif %}
+            {%endif%}
+
+            
+
+          {%else%}
+            {%if post.user|has_group:"Organisasjon"%}
+            <a href="{% url 'registration_add' post.id %}"class="btn btn-danger">Meld av</a>
+            {% endif %}
+          {%endif%}
+          
+        {% else %}
+          
+        {% endif %}
+        
+
+    
+    </div> 
+    <button onclick ="show_hide(reply_click({{ post.id }}))"class="btn btn-info">Se mer</button>
+    
+  </div>
+ 	</div>
+ {% endfor %}
+
+</div>
+</div>
+
+
+{% endblock content %}

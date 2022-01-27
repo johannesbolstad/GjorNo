@@ -1,0 +1,21 @@
+
+{% extends "page/base.html" %}
+{% block content %}
+<div class="animate__animated animate__fadeInUp">
+
+<div class="cont">
+        
+    <h2>Logg inn</h2>
+        <form method="post">
+            {% csrf_token %}
+            
+        <label for="username">Brukernavn: </label>
+        <input id="username" type="text" name="username">
+        <br>
+        <label for="password">Passord: </label>
+        <input id="password" type="password" name="password">
+        <br>
+        <button type="submit">Logg inn</button>
+        </form>
+        <p><a href="{% url 'password_reset' %}">Tilbakestill passord</a></p>
+{% endblock content %}
